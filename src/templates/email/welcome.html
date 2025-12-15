@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Email</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #007bff;
+        }
+        .header h1 {
+            color: #007bff;
+            margin: 0;
+        }
+        .content {
+            padding: 30px 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ようこそ！</h1>
+        </div>
+        <div class="content">
+            <p>{{userName}}様</p>
+            <p>Emulsiaへようこそ！アカウントの登録が完了しました。</p>
+            <p>以下のボタンをクリックして、アカウントを有効化してください。</p>
+            <center>
+                <a href="{{activationUrl}}" class="button">アカウントを有効化</a>
+            </center>
+            <p>ご不明な点がございましたら、お気軽にお問い合わせください。</p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2024 Emulsia. All rights reserved.</p>
+            <p>このメールに心当たりがない場合は、破棄してください。</p>
+        </div>
+    </div>
+</body>
+</html>
