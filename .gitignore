@@ -1,0 +1,26 @@
+# 環境変数
+.env
+
+# 依存パッケージ
+node_modules/
+
+# ログファイル
+*.log
+logs/
+
+# 設定データ
+data/
+
+# OS生成ファイル
+.DS_Store
+Thumbs.db
+
+# IDEファイル
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ビルド出力
+dist/
+build/

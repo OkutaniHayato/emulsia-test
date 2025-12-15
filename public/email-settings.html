@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>メール通知設定 - Emulsia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .section {
+            margin-bottom: 35px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .section:last-of-type {
+            border-bottom: none;
+        }
+
+        .section-title {
+            color: #444;
+            font-size: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: #667eea;
+            margin-right: 12px;
+            border-radius: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            transition: background-color 0.2s;
+        }
+
+        .checkbox-group:hover {
+            background: #e9ecef;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+        }
+
+        .checkbox-label {
+            color: #555;
+            font-size: 14px;
+            margin: 0;
+            flex: 1;
+        }
+
+        .checkbox-description {
+            color: #888;
+            font-size: 12px;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #555;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .btn-test {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-test:hover {
+            background: #218838;
+        }
+
+        .status-message {
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            display: none;
+            font-size: 14px;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .help-text {
+            color: #888;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+            }
+
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📧 メール通知設定</h1>
+        <p class="subtitle">メール送信とメール通知の設定を管理します</p>
+
+        <form id="emailSettingsForm">
+            <!-- SMTP設定 -->
+            <div class="section">
+                <h2 class="section-title">SMTP設定</h2>
+
+                <div class="form-group">
+                    <label for="smtpHost">SMTPホスト</label>
+                    <input type="text" id="smtpHost" name="smtpHost" placeholder="smtp.gmail.com">
+                    <p class="help-text">メール送信に使用するSMTPサーバーのホスト名</p>
+                </div>
+
+                <div class="two-column">
+                    <div class="form-group">
+                        <label for="smtpPort">ポート番号</label>
+                        <input type="number" id="smtpPort" name="smtpPort" placeholder="587">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="smtpSecure">セキュア接続</label>
+                        <select id="smtpSecure" name="smtpSecure">
+                            <option value="false">いいえ (TLS/STARTTLS)</option>
+                            <option value="true">はい (SSL)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="smtpUser">ユーザー名</label>
+                    <input type="email" id="smtpUser" name="smtpUser" placeholder="your-email@gmail.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="smtpPass">パスワード</label>
+                    <input type="password" id="smtpPass" name="smtpPass" placeholder="••••••••">
+                    <p class="help-text">Gmailの場合はアプリパスワードを使用してください</p>
+                </div>
+            </div>
+
+            <!-- デフォルト送信者設定 -->
+            <div class="section">
+                <h2 class="section-title">デフォルト送信者設定</h2>
+
+                <div class="form-group">
+                    <label for="defaultFromEmail">送信元メールアドレス</label>
+                    <input type="email" id="defaultFromEmail" name="defaultFromEmail" placeholder="noreply@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="defaultFromName">送信者名</label>
+                    <input type="text" id="defaultFromName" name="defaultFromName" placeholder="Emulsia System">
+                </div>
+            </div>
+
+            <!-- 通知設定 -->
+            <div class="section">
+                <h2 class="section-title">通知設定</h2>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="notifyWelcome" name="notifyWelcome" checked>
+                    <label for="notifyWelcome" class="checkbox-label">
+                        ウェルカムメール
+                        <span class="checkbox-description">新規ユーザー登録時にウェルカムメールを送信</span>
+                    </label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="notifyPasswordReset" name="notifyPasswordReset" checked>
+                    <label for="notifyPasswordReset" class="checkbox-label">
+                        パスワードリセット
+                        <span class="checkbox-description">パスワードリセット要求時にメールを送信</span>
+                    </label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="notifySystemUpdate" name="notifySystemUpdate">
+                    <label for="notifySystemUpdate" class="checkbox-label">
+                        システム更新通知
+                        <span class="checkbox-description">システムの重要な更新時に通知メールを送信</span>
+                    </label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="notifySecurityAlert" name="notifySecurityAlert" checked>
+                    <label for="notifySecurityAlert" class="checkbox-label">
+                        セキュリティアラート
+                        <span class="checkbox-description">不審なアクティビティ検出時にアラートを送信</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- ボタン -->
+            <div class="button-group">
+                <button type="button" class="btn-test" onclick="testConnection()">接続テスト</button>
+                <button type="submit" class="btn-primary">設定を保存</button>
+                <button type="button" class="btn-secondary" onclick="resetForm()">リセット</button>
+            </div>
+
+            <div id="statusMessage" class="status-message"></div>
+        </form>
+    </div>
+
+    <script>
+        // フォーム送信処理
+        document.getElementById('emailSettingsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const settings = Object.fromEntries(formData.entries());
+
+            // チェックボックスの値を適切に処理
+            settings.notifyWelcome = document.getElementById('notifyWelcome').checked;
+            settings.notifyPasswordReset = document.getElementById('notifyPasswordReset').checked;
+            settings.notifySystemUpdate = document.getElementById('notifySystemUpdate').checked;
+            settings.notifySecurityAlert = document.getElementById('notifySecurityAlert').checked;
+
+            try {
+                // ローカルストレージに保存（実際のアプリケーションではAPIに送信）
+                localStorage.setItem('emailSettings', JSON.stringify(settings));
+                showStatus('設定が正常に保存されました', 'success');
+            } catch (error) {
+                showStatus('設定の保存に失敗しました: ' + error.message, 'error');
+            }
+        });
+
+        // 接続テスト
+        async function testConnection() {
+            const smtpHost = document.getElementById('smtpHost').value;
+            const smtpUser = document.getElementById('smtpUser').value;
+
+            if (!smtpHost || !smtpUser) {
+                showStatus('SMTP設定を入力してください', 'error');
+                return;
+            }
+
+            showStatus('接続をテスト中...', 'success');
+
+            // 実際のアプリケーションではAPIエンドポイントを呼び出す
+            setTimeout(() => {
+                showStatus('SMTP接続テストが完了しました（デモモード）', 'success');
+            }, 1500);
+        }
+
+        // フォームリセット
+        function resetForm() {
+            if (confirm('設定をリセットしてもよろしいですか？')) {
+                document.getElementById('emailSettingsForm').reset();
+                localStorage.removeItem('emailSettings');
+                showStatus('設定がリセットされました', 'success');
+            }
+        }
+
+        // ステータスメッセージ表示
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.textContent = message;
+            statusDiv.className = `status-message status-${type}`;
+            statusDiv.style.display = 'block';
+
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // ページ読み込み時に保存された設定を復元
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedSettings = localStorage.getItem('emailSettings');
+
+            if (savedSettings) {
+                const settings = JSON.parse(savedSettings);
+
+                Object.keys(settings).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        if (element.type === 'checkbox') {
+                            element.checked = settings[key];
+                        } else {
+                            element.value = settings[key];
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
